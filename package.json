@@ -1,0 +1,25 @@
+{
+  "name": "metalsmith-plugin-resolver",
+  "version": "0.0.0",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "assert-dir-equal": "^1.0.1",
+    "metalsmith": "^2.3.0",
+    "mocha": "^3.5.0",
+    "rimraf": "^2.6.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/gaggle/metalsmith-plugin-resolver.git"
+  },
+  "author": "Jon Lauridsen <mail@jonlauridsen.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gaggle/metalsmith-plugin-resolver/issues"
+  },
+  "homepage": "https://github.com/gaggle/metalsmith-plugin-resolver#readme"
+}
