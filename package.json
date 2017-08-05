@@ -10,7 +10,8 @@
     "rimraf": "^2.6.1"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "clean": "rm -rf ./test/fixtures/*/build/"
   },
   "repository": {
     "type": "git",
