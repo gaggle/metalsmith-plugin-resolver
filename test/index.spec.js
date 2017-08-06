@@ -1,17 +1,16 @@
 "use strict";
-const assert = require("assert")
 const equal = require("assert-dir-equal")
 const Metalsmith = require("metalsmith")
 const path = require("path")
 const rimraf = require("rimraf")
 
-const Resolver = require("../index")
+const Resolver = require("../lib/index")
 
 describe("plugin-resolver", function () {
   before(done => rimraf("test/fixtures/*/build", done))
 
-  it("resolves sync plugin", function (done) {
-    assertProcessingOf("test/fixtures/basic", [compositePlugin(renamePluginSync)], done)
+  it("resolves sync plugin", function () {
+    assertProcessingOf("test/fixtures/basic", [compositePlugin(renamePluginSync)])
   })
 
   it("resolves async plugin", function (done) {
@@ -19,23 +18,25 @@ describe("plugin-resolver", function () {
   })
 })
 
-const assertProcessingOf = function (dir, plugins = [], done) {
-  const ms = Metalsmith(dir)
-  plugins.forEach(p => ms.use(p))
-  ms.build(err => {
-    if (err) return done(err)
+const assertProcessingOf = function (dir, plugins = [], done = undefined) {
+  const metalsmith = Metalsmith(dir)
+  plugins.forEach(p => metalsmith.use(p))
+  metalsmith.build(err => {
+    if (err) {
+      if (done) return done(err)
+      throw new Error(err)
+    }
     equal(path.join(dir, "expected"), path.join(dir, "build"))
-    done()
+    if (done) done()
   })
 }
 
 const compositePlugin = function (subplugin) {
-  return function (files, metalsmith, done) {
-    const resolvePlugin = Resolver(files, metalsmith)
-    Promise.resolve()
-      .then(() => resolvePlugin(subplugin))
-      .then(() => done())
-      .catch(err => done(err))
+  return function (files, metalsmith) {
+    const resolver = new Resolver(...arguments)
+    resolver
+      .use(subplugin())
+      .run()
   }
 }
 
