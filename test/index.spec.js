@@ -33,6 +33,7 @@ describe("plugin-resolver", function () {
 })
 
 const compositePlugin = function (subplugin) {
+
   return function (files, metalsmith, done) {
     const resolver = new Resolver(...arguments)
     resolver
