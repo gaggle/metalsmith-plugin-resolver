@@ -1,4 +1,5 @@
 "use strict";
+const assert = require("assert")
 const equal = require("assert-dir-equal")
 const Metalsmith = require("metalsmith")
 const path = require("path")
@@ -10,33 +11,33 @@ describe("plugin-resolver", function () {
   before(done => rimraf("test/fixtures/*/build", done))
 
   it("resolves sync plugin", function () {
-    assertProcessingOf("test/fixtures/basic", [compositePlugin(renamePluginSync)])
+    const dir = "test/fixtures/basic"
+    return Metalsmith(dir)
+      .use(compositePlugin(renamePluginSync))
+      .build(err => {
+        if (err) throw new Error(err)
+        equal(path.join(dir, "expected"), path.join(dir, "build"))
+      })
   })
 
   it("resolves async plugin", function (done) {
-    assertProcessingOf("test/fixtures/basic", [compositePlugin(renamePluginAsync)], done)
+    const dir = "test/fixtures/basic"
+    return Metalsmith(dir)
+      .use(compositePlugin(renamePluginAsync))
+      .build(err => {
+        if (err) return done(err)
+        equal(path.join(dir, "expected"), path.join(dir, "build"))
+        done()
+      })
   })
 })
 
-const assertProcessingOf = function (dir, plugins = [], done = undefined) {
-  const metalsmith = Metalsmith(dir)
-  plugins.forEach(p => metalsmith.use(p))
-  metalsmith.build(err => {
-    if (err) {
-      if (done) return done(err)
-      throw new Error(err)
-    }
-    equal(path.join(dir, "expected"), path.join(dir, "build"))
-    if (done) done()
-  })
-}
-
 const compositePlugin = function (subplugin) {
-  return function (files, metalsmith) {
+  return function (files, metalsmith, done) {
     const resolver = new Resolver(...arguments)
     resolver
       .use(subplugin())
-      .run()
+      .run(done)
   }
 }
 
@@ -57,8 +58,8 @@ const renamePluginAsync = function () {
 
 const rename = function (files) {
   Object.keys(files).forEach(fn => {
-    let newfn = path.join("moved", fn)
-    files[newfn] = files[fn]
+    let newFn = path.join("moved", fn)
+    files[newFn] = files[fn]
     delete files[fn]
   })
 }
