@@ -15,14 +15,6 @@
     "test": "mocha",
     "clean": "rm -rf ./test/fixtures/*/build/"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/gaggle/metalsmith-plugin-resolver.git"
-  },
   "author": "Jon Lauridsen <mail@jonlauridsen.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/gaggle/metalsmith-plugin-resolver/issues"
-  },
-  "homepage": "https://github.com/gaggle/metalsmith-plugin-resolver#readme"
+  "license": "ISC"
 }

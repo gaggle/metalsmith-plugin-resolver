@@ -8,7 +8,7 @@ const rimraf = require("rimraf")
 const Resolver = require("../lib/index")
 
 describe("plugin-resolver", function () {
-  before(done => rimraf("test/fixtures/*/build", done))
+  beforeEach(done => rimraf("test/fixtures/*/build", done))
 
   it("resolves sync plugin", function () {
     const dir = "test/fixtures/basic"
